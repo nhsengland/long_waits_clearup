@@ -49,3 +49,5 @@ icb_list <- current_position %>%
 rmarkdown::render('RScripts\\long_wait_report.Rmd', 
                   output_file = paste0("long_wait_report_test"),
                   output_dir = "Output")
+
+rmarkdown::render('RScripts\\flex_dashboard_test.Rmd')

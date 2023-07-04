@@ -59,6 +59,7 @@ rm(week_one_set)
 
 #### step 5 get the unique rows from the RTT data minus the activity and the dates
 #### then bind the treatment function names to the TFC codes
+#### we also want to know the number of distinct specialties each provider reports/has reported against
 
 org_specs <- raw_data %>% 
   filter(activity_date >= start_date) %>% 
@@ -69,6 +70,15 @@ org_specs <- raw_data %>%
          rtt_tfc_descriptor,
          wait_type) %>% 
   distinct()
+
+specs_per_org <- org_specs %>% 
+  select(organisation_name,
+         activity_treatment_function_code,
+         wait_type) %>% 
+  distinct() %>% 
+  count(organisation_name,
+        wait_type) %>% 
+  rename('total_specs' = n)
 
 tfc_list <- tfc_list %>% 
   select(tfc,
@@ -94,8 +104,8 @@ org_specs <- left_join(x=org_specs,
 framework <- merge(x = weeks_by_trust,
                    y = org_specs,
                    by = 'organisation_code')
-  
-rm(org_specs,all_weeks_ending,weeks_by_trust,tfc_list)
+
+rm(org_specs, all_weeks_ending,weeks_by_trust,tfc_list)
 
 #### step 7 now we add the activity back in from the raw data, missing weeks will show as NA 
 

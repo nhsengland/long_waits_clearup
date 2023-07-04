@@ -9,5 +9,7 @@ pacman::p_load(tidyverse,
                odbc,
                ggplot2,
                writexl,
-               jsonlite)
+               jsonlite,
+               flexdashboard,
+               DT)
 
