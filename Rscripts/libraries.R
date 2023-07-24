@@ -11,5 +11,5 @@ pacman::p_load(tidyverse,
                writexl,
                jsonlite,
                flexdashboard,
-               DT)
-
+               DT,
+               plotly)

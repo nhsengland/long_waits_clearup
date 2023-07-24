@@ -49,7 +49,7 @@ op_breach_specs <- nrow(op_projections)
 Row {data-height=600}
 -----------------------------------------------------------------------
 
-### Admitted specialities - projected breaches {data-width=800}
+### Admitted specialities - projected breaches
 
 ```{r admitted projections}
 datatable(admitted_projections,
@@ -67,6 +67,9 @@ datatable(admitted_projections,
 ```
 
 
+Row {data-height=400}
+-----------------------------------------------------------------------
+
 ### Percentage of non-admitted specialities with projected long waits after deadline {data-width=200}
 
 ```{r valuebox showing % of admitted specialities with projected breaches}
@@ -75,11 +78,7 @@ valueBox(round(dta_breach_specs/total_dta_specs*100,1), icon = 'fa-percent')
 
 ```
 
-
-Row {data-height=400}
------------------------------------------------------------------------
-
-### admitted long waits by week
+### admitted long waits by week {data-width=800}
 
 ``` {r }
 apc_lw_trend <- full_long_wait_data %>% 

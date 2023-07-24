@@ -46,8 +46,12 @@ icb_list <- current_position %>%
 #                    params = list(icb = paramicb))
 #}
 
-rmarkdown::render('RScripts\\long_wait_report.Rmd', 
-                  output_file = paste0("long_wait_report_test"),
-                  output_dir = "Output")
+#rmarkdown::render('RScripts\\long_wait_report.Rmd', 
+#                  output_file = paste0("long_wait_report_test"),
+#                  output_dir = "Output")
 
-rmarkdown::render('RScripts\\flex_dashboard_test.Rmd')
+t <- 'OXFORD UNIVERSITY HOSPITALS NHS FOUNDATION TRUST'
+
+rmarkdown::render('RScripts\\fd_test_2_pg_row.Rmd')
+
+rmarkdown::render('RScripts\\fd_test_1_pg_column.Rmd')

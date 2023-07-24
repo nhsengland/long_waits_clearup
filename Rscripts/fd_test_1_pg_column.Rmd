@@ -2,7 +2,7 @@
 title: "Long wait projections"
 output: 
   flexdashboard::flex_dashboard:
-    orientation: rows
+    orientation: columns
     vertical_layout: fill
 ---
 
@@ -45,11 +45,11 @@ op_breach_specs <- nrow(op_projections)
 
 ```
 
-# Admitted Waits 
-Row {data-height=600}
+# OUH 
+Column {data-width=700}
 -----------------------------------------------------------------------
 
-### Admitted specialities - projected breaches {data-width=800}
+### Admitted specialities - projected breaches
 
 ```{r admitted projections}
 datatable(admitted_projections,
@@ -66,8 +66,28 @@ datatable(admitted_projections,
                       color = 'white')
 ```
 
+### Non-Admitted specialities - projected breaches
 
-### Percentage of non-admitted specialities with projected long waits after deadline {data-width=200}
+```{r outpatient projections}
+datatable(op_projections,
+          class = 'cell-border stripe',
+          colnames = c('Treatment Function',
+                       'Current PTL',
+                       'Current Long Waits',
+                       'Est. Position At Deadline',
+                       'Change Trend'),
+          rownames = FALSE) %>% 
+          formatStyle('change_trend',
+                      backgroundColor = styleEqual(c('growing','no change','reducing'),
+                                                   c(table_red,highlight,table_green)),
+                      color = 'white')
+
+```
+
+Column {data-width=300}
+-----------------------------------------------------------------------
+
+### Percentage of admitted specialities with projected long waits after deadline 
 
 ```{r valuebox showing % of admitted specialities with projected breaches}
 
@@ -75,11 +95,7 @@ valueBox(round(dta_breach_specs/total_dta_specs*100,1), icon = 'fa-percent')
 
 ```
 
-
-Row {data-height=400}
------------------------------------------------------------------------
-
-### admitted long waits by week
+### admitted long waits by week 
 
 ``` {r }
 apc_lw_trend <- full_long_wait_data %>% 
@@ -98,42 +114,17 @@ apc_lw_trend <- ggplot(apc_lw_trend, aes(x=week_ending,y=long_waits))+
 
 ggplotly(apc_lw_trend)
 
-```
-
-
-# Non-Admitted Waits 
-Row {data-height=600}
------------------------------------------------------------------------
-
-### Non-Admitted specialities - projected breaches {data-width=800}
-
-```{r outpatient projections}
-datatable(op_projections,
-          class = 'cell-border stripe',
-          colnames = c('Treatment Function',
-                       'Current PTL',
-                       'Current Long Waits',
-                       'Est. Position At Deadline',
-                       'Change Trend'),
-          rownames = FALSE) %>% 
-          formatStyle('change_trend',
-                      backgroundColor = styleEqual(c('growing','no change','reducing'),
-                                                   c(table_red,highlight,table_green)),
-                      color = 'white')
 
 ```
 
-### Percentage of non-admitted specialities with projected long waits after deadline {data-width=200}
+
+### Percentage of non-admitted specialities with projected long waits after deadline 
 
 ```{r valuebox showing % of non-admitted specialities with projected breaches}
 
 valueBox(round(op_breach_specs/total_op_specs*100,1), icon = 'fa-percent')
 
 ```
-
-
-Row {data-height=400}
------------------------------------------------------------------------
 
 ### outpatient long waits by week
 
