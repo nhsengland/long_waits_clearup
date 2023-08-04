@@ -1,0 +1,10 @@
+---
+title: "Long wait projections"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+---
+
+```{r, child =c("child_bob.Rmd")}
+```

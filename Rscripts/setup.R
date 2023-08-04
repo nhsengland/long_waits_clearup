@@ -29,10 +29,10 @@ number_of_weeks_for_average <- 16
 source('Rscripts\\create_data_frames.R')
 
 
-icb_list <- current_position %>% 
-  select(stp_name) %>% 
-  distinct() %>% 
-  pull(stp_name)
+#icb_list <- current_position %>% 
+#  select(stp_name) %>% 
+#  distinct() %>% 
+#  pull(stp_name)
 
 ##### set the region name
 #region_name  <- 'the South East region'
@@ -50,8 +50,8 @@ icb_list <- current_position %>%
 #                  output_file = paste0("long_wait_report_test"),
 #                  output_dir = "Output")
 
-t <- 'OXFORD UNIVERSITY HOSPITALS NHS FOUNDATION TRUST'
+#rmarkdown::render('RScripts\\fd_test_2_pg_row.Rmd')
 
-rmarkdown::render('RScripts\\fd_test_2_pg_row.Rmd')
+#rmarkdown::render('RScripts\\fd_test_1_pg_column.Rmd')
 
-rmarkdown::render('RScripts\\fd_test_1_pg_column.Rmd')
+rmarkdown::render('RScripts\\parent_main.Rmd')
