@@ -1,0 +1,111 @@
+`r paste0('# ', prov_short_name, '{data-navmenu="',stp_short_name,'"}')`
+
+```{r setup, include=FALSE}
+
+admitted_projections <- cp %>% 
+  filter(wait_type == 'DTA_Wait') %>% 
+  select(tfc_name, 
+         current_ptl,
+         current_long_waits,
+         est_position_at_deadline,
+         mean_change_lw,
+         change_trend) %>% 
+  arrange(desc(est_position_at_deadline))
+
+op_projections <- cp %>% 
+  filter(wait_type == 'OP_Wait')%>% 
+  select(tfc_name,
+         current_ptl,
+         current_long_waits,
+         est_position_at_deadline,
+         mean_change_lw,
+         change_trend) %>% 
+  arrange(desc(est_position_at_deadline))
+
+total_dta_specs <-  spo %>% 
+  filter(wait_type=='DTA_Wait') %>% 
+  pull(total_specs)
+
+total_op_specs <-  spo %>% 
+    filter(wait_type=='OP_Wait') %>% 
+  pull(total_specs)
+
+dta_breach_specs <- nrow(admitted_projections)
+op_breach_specs <- nrow(op_projections)
+
+```
+
+
+Column {data-width=425}
+-----------------------------------------------------------------------
+
+### `r paste0(prov_short_name, ' Admitted specialities - projected breaches')`
+
+```{r admitted-projections}
+
+fn_projections_dt(admitted_projections)
+
+```
+
+### `r paste0(prov_short_name, ' Non-Admitted specialities - projected breaches')`
+
+```{r outpatient-projections}
+
+fn_projections_dt(op_projections)
+
+```
+
+Column {data-width=425}
+-----------------------------------------------------------------------
+
+### `r paste0(prov_short_name, ' Admitted long waits trend by week')` 
+
+``` {r apc-trend}
+
+apc_lw_trend<- fn_lw_trend(flwd,'DTA_Wait')
+
+ggplotly(apc_lw_trend)
+
+
+```
+
+### `r paste0(prov_short_name, ' Outpatient long waits trend by week')`
+
+``` {r op-trend}
+op_lw_trend<- fn_lw_trend(flwd,'OP_Wait')
+
+ggplotly(op_lw_trend)
+```
+
+Column {data-width=150}
+-----------------------------------------------------------------------
+### `r paste0(prov_short_name, ' Number of admitted specialities with projected long waits after deadline')`
+
+```{r valuebox-admitted}
+
+valueBox(dta_breach_specs, icon = 'fa-calculator')
+
+```
+
+### `r paste0(prov_short_name, ' Percentage of admitted specialities with projected long waits after deadline')`
+```{r valuebox-admitted}
+
+valueBox(round(dta_breach_specs/total_dta_specs*100,1), icon = 'fa-percent')
+
+```
+
+### `r paste0(prov_short_name, ' Number of non-admitted specialities with projected long waits after deadline')`
+
+```{r valuebox-nonadmitted}
+
+valueBox(op_breach_specs, icon = 'fa-calculator')
+
+```
+
+### `r paste0(prov_short_name, ' Percentage of non-admitted specialities with projected long waits after deadline')`
+
+```{r valuebox-nonadmitted}
+
+valueBox(round(op_breach_specs/total_op_specs*100,1), icon = 'fa-percent')
+
+```

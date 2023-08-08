@@ -72,11 +72,11 @@ org_specs <- raw_data %>%
   distinct()
 
 specs_per_org <- org_specs %>% 
-  select(organisation_name,
+  select(organisation_code,
          activity_treatment_function_code,
          wait_type) %>% 
   distinct() %>% 
-  count(organisation_name,
+  count(organisation_code,
         wait_type) %>% 
   rename('total_specs' = n)
 
@@ -207,10 +207,11 @@ current_position <- current_position %>%
   mutate(change_trend = case_when(mean_change_lw == 0 ~ 'no change',
                                     mean_change_lw < 0 ~ 'reducing',
                                     mean_change_lw > 0 ~ 'growing')) %>% 
-  mutate(weeks_to_clear = case_when(change_trend == 'reducing' ~ current_long_waits/(mean_change_lw*-1))) %>% 
+  mutate(weeks_to_clear = case_when(mean_change_lw < 0 ~ current_long_waits/(mean_change_lw*-1))) %>% 
   mutate(est_position_at_deadline = 
            case_when(weeks_to_clear < weeks_remaining ~ 0,
                      weeks_to_clear >= weeks_remaining ~ ceiling(mean_change_lw*weeks_remaining+current_long_waits),
                      change_trend != 'reducing' ~ ceiling(mean_change_lw*weeks_remaining+current_long_waits)))
+
 
 

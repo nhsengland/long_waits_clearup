@@ -1,0 +1,119 @@
+---
+title: "Long wait projections"
+output: 
+  flexdashboard::flex_dashboard:
+    vertical_layout: fill
+ 
+---
+
+```{css}
+.value-box {
+  height: 25%;
+}
+
+.chart-title {
+    font-size: 18px;
+}
+
+```
+
+```{r, setup, include= FALSE }
+
+#### deadline - this sets when we want to aim to clear the list by
+deadline <- as.Date('2024-03-31')
+
+#### WLMDS data is submitted at the end of a week, 
+#### the below finds the closest Sunday to the deadline entered above
+
+deadline_week_ending <- fn_eoweek(deadline)
+number_of_weeks_for_average <- 16
+
+## create the data frames
+source('Rscripts\\create_data_frames.R')
+```
+
+Cover {data-orientation=rows}
+====================================== 
+
+
+Row {data-height=100}
+----------------------------------------------------------------------
+
+### Purpose of this document
+
+This document is intended to support in meeting the goal of having no patients on an RTT pathway waiting over 65 weeks for a first definitive treatment by 31st March 2024.
+
+Data for this report was retrieved on `r paste0(day(today()),'-',month(today(),label=TRUE,abbr=TRUE),'-',year(today()))` and presents data submitted to the Waiting List Minimum Data Set (WLMDS). The data covers the period from the week ending `r paste0(day(min_date),'-',month(min_date,label=TRUE,abbr=TRUE),'-',year(min_date))` until week ending `r paste0(day(max_date),'-',month(max_date,label=TRUE,abbr=TRUE),'-',year(max_date))`.
+
+Row {data-height=500}
+----------------------------------------------------------------------
+### Methodology
+
+This report extracts the data submitted to the WLMDS for each of the weekly submissions between the dates identified above. 
+
+From here the following methodology is applied individually for each trust:
+
+1. Identify the earliest week of reporting within the dataset
+2. For that week and every subsequent week calculate at an individual specialty level:
+    + The size of the total waiting list for each trust (total PTL)
+    + The number of patients on the waiting list who have been waiting over 65 weeks on the week of reporting
+3. For any week where a trust has not submitted data to the WLMDS **after** their first week of submission, a zero value is assigned
+4. The weekly running difference in both the size of the total waiting list and the number of patients who have been waiting for over 65 weeks are calculated
+5. The mean average of those differences is then used to calculate the average weekly change in the total PTL and the number of patients waiting over 65 weeks
+6. Next the expected position on the 31st March 2024 deadline is calculated for specialties where there are patients who have been waiting over 65 weeks in the latest submission. This is done by multiplying the average weekly change in people waiting by `r paste0(weeks_remaining)` (the number of weeks remaining until the 31st March 2024)
+7. This figure is then added to the number of people waiting over 65 weeks as of `r paste0(day(max_date),'-',month(max_date,label=TRUE,abbr=TRUE),'-',year(max_date))` to give an estimated year end position
+
+
+```{r, create-subpages, include = FALSE}
+
+subpage_env <- new.env()
+out = NULL
+
+options(knitr.duplicate.label = 'allow')
+
+organisation_codes <- current_position %>% 
+  arrange(stp_name,organisation_name) %>% 
+  select(organisation_code) %>% 
+  distinct() %>% 
+  pull()
+
+for (org_code in organisation_codes) {
+
+code <- org_code
+
+prov_short_name <- local_names %>% 
+  filter(provider_code == code) %>% 
+  select(provider_short_name) %>% 
+  unique() %>% 
+  pull()
+
+stp_short_name <- local_names %>% 
+  filter(provider_code == code) %>% 
+  select(stp_short_name) %>% 
+  unique() %>% 
+  pull()
+
+flwd <- full_long_wait_data %>% 
+  filter(organisation_code == code)
+
+cp <- current_position %>% 
+  filter(est_position_at_deadline > 0) %>% 
+  filter(organisation_code == code)
+
+spo <- specs_per_org %>% 
+  filter(organisation_code == code)
+
+assign("code",code,subpage_env)
+assign("prov_short_name",prov_short_name,subpage_env)
+assign("stp_short_name",stp_short_name,subpage_env)
+assign("cp",cp,subpage_env)
+assign("spo",spo,subpage_env)
+assign("flwd",flwd,subpage_env)
+
+out = c(out, knitr::knit_child('RScripts\\child_trust.Rmd',envir = subpage_env))
+
+}
+
+```
+
+`r paste(knitr::knit_child(text = out), collapse = '')`
