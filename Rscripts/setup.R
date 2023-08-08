@@ -6,6 +6,11 @@
 ## Load libraries
 source('Rscripts\\libraries.R')
 
+#make connection
+#note that you will get a little window you need to put your password into BUT
+#it doesn't force itself to the top so you might need to check your taskbar
+source('Rscripts\\connection.R')
+
 ## Import data
 source('Rscripts\\data_import.R')
 
@@ -24,3 +29,5 @@ source('Rscripts\\local_colours.R')
 rmarkdown::render(input = 'parent_main.Rmd',
                   output_file = 'long_wait_test.html',
                   output_dir = 'outputs')
+
+

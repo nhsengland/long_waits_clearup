@@ -1,12 +1,9 @@
-#make connection
-#note that you will get a little window you need to put your password into BUT
-#it doesn't force itself to the top so you might need to check your taskbar
-source('scripts/connection.R')
-
 
 #get the data
-raw_date <- DBI::dbGetQuery(conn = con_udal, 
-                            statement = readr::read_file("SQL/lw_and_full_ptl.sql"))
+raw_data <- DBI::dbGetQuery(conn = con_udal, 
+                            statement = readr::read_file("SQL/lw_and_full_ptl.sql")) 
+raw_data <- raw_data %>% 
+  mutate(Activity_Date = as.Date(Activity_Date))
 
 DBI::dbDisconnect(con_udal)
 
@@ -19,5 +16,3 @@ tfc_list <- read_csv("lookups/tfc_list.csv",
 
 local_names <- read_csv("lookups/provider_short_names.csv",
                         show_col_types = FALSE)
-
-

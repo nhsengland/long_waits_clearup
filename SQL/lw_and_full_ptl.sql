@@ -20,7 +20,7 @@ SELECT
 	,SUM(CASE WHEN [Der_Record_ID] IS NOT NULL THEN 1 ELSE 0 END) AS total_ptl
 
 FROM [Reporting].[MESH_WLMDS_Open_ASI_Combined] AS WL																								
-LEFT OUTER JOIN [Reporting].[Ref_ODS_Provider_Hierarchies] AS Ref on DerProviderCode = Ref.Organisation_Code
+LEFT OUTER JOIN [Reporting_UKHD_ODS].[Provider_Hierarchies] AS Ref on DerProviderCode = Ref.Organisation_Code
 LEFT OUTER JOIN [Internal_RTT].[RTT_TFC_Mappings] AS TFC on cast([ACTIVITY_TREATMENT_FUNCTION_CODE] as varchar) = cast([National_TFC_code] as varchar)	
 
 WHERE 
