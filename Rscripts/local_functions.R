@@ -51,6 +51,7 @@ fn_lw_trend <- function(df, wt) {
 
   lw_trend <- ggplot(lw_trend, aes(x=week_ending,y=long_waits))+
     geom_point()+
+    geom_line()+
     expand_limits(y=0)+
     scale_x_date(
       date_breaks = '1 week',
