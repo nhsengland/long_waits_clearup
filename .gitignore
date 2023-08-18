@@ -64,4 +64,14 @@ rsconnect/
 
 # html outputs
 *.html
+
+# specific .R files
+linear_regressions.R
+connection.R
+
+# archive folder
+archive/
+
+# file for presentation
 Dynamic flex dashboard pages.docx
+
