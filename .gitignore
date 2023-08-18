@@ -65,5 +65,9 @@ rsconnect/
 # html outputs
 *.html
 
-# r connection file
+# specific .R files
+linear_regressions.R
 connection.R
+
+# archive folder
+archive/
