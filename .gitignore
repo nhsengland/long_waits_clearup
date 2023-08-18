@@ -64,3 +64,6 @@ rsconnect/
 
 # html outputs
 *.html
+
+# r connection file
+connection.R
